@@ -7,21 +7,41 @@ import (
 	"gorm.io/gorm"
 )
 
-func connectDB() {
+// Function for connect DB and generate Entites
+func ConnectDB() gorm.DB {
 
-	dsn := "host=localhost user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai"
+	dsn := "host=127.0.0.1 user=about password=about_password dbname=about port=5432 sslmode=disable TimeZone=America/Sao_Paulo"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		panic(err)
 	}
 
-	// Migrate the schema
+	sqlDB, err := db.DB()
+
+	if err != nil {
+		panic(err)
+	}
+
+	sqlDB.SetMaxIdleConns(2)
+
+	sqlDB.SetMaxOpenConns(5)
+
 	db.AutoMigrate(&types.Post{})
 	db.AutoMigrate(&types.Tags{})
 
-	// Create
-	db.Create(&types.Post{})
-	db.Create(&types.Tags{})
+	tag := types.Tags{
+		Subject: "javascript",
+	}
 
+	// Create
+	db.Create(&types.Post{
+		Title: "Meu primeiro post",
+		Body:  "Esse post é o primeiro de muitos da minha rede social about-me",
+		Tags: []types.Tags{
+			tag,
+		},
+	})
+
+	return *db
 }

@@ -1,0 +1,10 @@
+version: "3.7"
+services:
+  postgres_cadastro:
+    container_name: about_me
+    image: postgres:12.2
+    environment: 
+      POSTGRES_USER: about
+      POSTGRES_PASSWORD: about_password
+    ports:
+      - "5432:5432"

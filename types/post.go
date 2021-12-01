@@ -11,8 +11,8 @@ type Post struct {
 	ID        uint `gorm:"primaryKey"`
 	Title     string
 	Body      string
-	Tags      []Tags
+	Tags      []Tags `gorm:"foreignKey:PostRefer"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `gorm:"index"`
+	DeletedAt gorm.DeletedAt
 }
